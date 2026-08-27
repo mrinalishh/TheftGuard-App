@@ -27,8 +27,7 @@ STORAGE_OUTPUT.mkdir(parents=True, exist_ok=True)
 
 app = FastAPI(title="TheftGuard API")
 
-# allow any localhost port, since Vite picks a new one (5173, 5174, 5175...)
-# whenever the previous port is still occupied by an old process
+
 app.add_middleware(
     CORSMiddleware,
     allow_origin_regex=r"http://localhost:\d+",
@@ -154,3 +153,4 @@ async def live_feed(websocket: WebSocket):
             await websocket.send_json({"detections": detections})
     except WebSocketDisconnect:
         pass
+    

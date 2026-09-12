@@ -4,7 +4,7 @@ from datetime import datetime
 from sqlalchemy import Column, String, Float, Integer, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 
-from database import Base
+from .database import Base
 
 
 def gen_id():

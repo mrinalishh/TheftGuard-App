@@ -13,15 +13,15 @@ from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 from ultralytics import YOLO
 
-from database import Base, engine, get_db
-import models
-from detector import run_detection
-from theft_logic import analyze
+from .database import Base, engine, get_db
+from . import models
+from ai.detector import run_detection
+from ai.theft_logic import analyze
 
 Base.metadata.create_all(bind=engine)
 
-STORAGE_INPUT = Path("../storage/input")
-STORAGE_OUTPUT = Path("../storage/output")
+STORAGE_INPUT = Path("storage/input")
+STORAGE_OUTPUT = Path("storage/output")
 STORAGE_INPUT.mkdir(parents=True, exist_ok=True)
 STORAGE_OUTPUT.mkdir(parents=True, exist_ok=True)
 
@@ -30,13 +30,16 @@ app = FastAPI(title="TheftGuard API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origin_regex=r"http://localhost:\d+",
+    allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-app.mount("/files", StaticFiles(directory="../storage/output"), name="files")
-
+app.mount(
+    "/files",
+    StaticFiles(directory=str(STORAGE_OUTPUT)),
+    name="files"
+)
 
 def process_video_job(job_id, video_path, db):
     job = db.query(models.Job).filter(models.Job.id == job_id).first()

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE = "http://localhost:8000";
+const API_BASE = "https://theftguard-backend.onrender.com";
 
 export async function uploadVideo(file, onProgress) {
   const formData = new FormData();
